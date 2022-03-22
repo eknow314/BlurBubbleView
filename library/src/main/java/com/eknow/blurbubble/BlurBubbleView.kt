@@ -59,7 +59,8 @@ class BlurBubbleView @JvmOverloads constructor(
 
         mPath.reset()
 
-        var topOffset = max(
+        // 顶部偏移量
+        val topOffset = max(
             if (mArrowPosition + mArrowLength > mBottom) {
                 mBottom - mArrowWidth
             } else {
@@ -67,8 +68,8 @@ class BlurBubbleView @JvmOverloads constructor(
             },
             mShadowRadius
         )
-
-        var leftOffset = max(
+        // 左侧偏移量
+        val leftOffset = max(
             if (mArrowPosition + mArrowLength > mRight) {
                 mRight - mArrowWidth
             } else {
@@ -79,10 +80,10 @@ class BlurBubbleView @JvmOverloads constructor(
 
         // 根据箭头所在位置，计算箭头位置和形状
         when (mArrowAt) {
-            ArrowAt.LEFT -> { 
-                // 判断是否足够画箭头，偏移的量 > 气泡圆角
+            ArrowAt.LEFT -> {
+                // 绘制箭头上半部，判断是否足够画箭头，偏移的量 > 气泡圆角
                 if (topOffset >= mLTR) {
-                    mPath.moveTo(mLeft.toFloat(), (topOffset).toFloat())
+                    mPath.moveTo(mLeft.toFloat(), topOffset.toFloat())
                     mPath.rCubicTo(
                         0f,
                         0f,
@@ -92,24 +93,30 @@ class BlurBubbleView @JvmOverloads constructor(
                         mArrowWidth / 2f
                     )
                 } else {
-                    // 起点移动到箭头尖
+                    // 将起点移动到箭头尖
                     mPath.moveTo((mLeft - mArrowLength).toFloat(), topOffset + mArrowWidth / 2f)
                 }
-
-                // 判断是否足够画箭头，偏移的量 + 箭头宽 <= 气泡高 - 气泡圆角
+                // 绘制箭头下半部，判断是否足够画箭头，偏移的量 + 箭头宽 <= 气泡高 - 气泡圆角
                 if (topOffset + mArrowWidth < mBottom - mLBR) {
                     mPath.rCubicTo(
-                        0f, 0f,
-                        mArrowLength.toFloat(), mArrowWidth / 2f,
-                        mArrowLength.toFloat(), mArrowWidth / 2f
+                        0f,
+                        0f,
+                        mArrowLength.toFloat(),
+                        mArrowWidth / 2f,
+                        mArrowLength.toFloat(),
+                        mArrowWidth / 2f
                     )
                     mPath.lineTo(mLeft.toFloat(), (mBottom - mLBR).toFloat())
                 }
+                // 绘制左下圆角
                 mPath.quadTo(
-                    mLeft.toFloat(), mBottom.toFloat(), (
-                            mLeft + mLBR).toFloat(), mBottom.toFloat()
+                    mLeft.toFloat(),
+                    mBottom.toFloat(),
+                    (mLeft + mLBR).toFloat(),
+                    mBottom.toFloat()
                 )
                 mPath.lineTo((mRight - mRBR).toFloat(), mBottom.toFloat())
+                // 绘制右下圆角
                 mPath.quadTo(
                     mRight.toFloat(),
                     mBottom.toFloat(),
@@ -117,6 +124,7 @@ class BlurBubbleView @JvmOverloads constructor(
                     (mBottom - mRBR).toFloat()
                 )
                 mPath.lineTo(mRight.toFloat(), (mTop + mRTR).toFloat())
+                // 绘制右上圆角
                 mPath.quadTo(
                     mRight.toFloat(),
                     mTop.toFloat(),
@@ -124,6 +132,7 @@ class BlurBubbleView @JvmOverloads constructor(
                     mTop.toFloat()
                 )
                 mPath.lineTo((mLeft + mLTR).toFloat(), mTop.toFloat())
+                // 绘制左上圆角
                 if (topOffset >= mLTR) {
                     mPath.quadTo(
                         mLeft.toFloat(),
@@ -141,13 +150,193 @@ class BlurBubbleView @JvmOverloads constructor(
                 }
             }
             ArrowAt.TOP -> {
+                if (leftOffset >= mLTR) {
+                    mPath.moveTo(leftOffset.toFloat(), mTop.toFloat())
+                    mPath.rCubicTo(
+                        0f,
+                        0f,
+                        mArrowWidth / 2f,
+                        -mArrowLength.toFloat(),
+                        mArrowWidth / 2f,
+                        -mArrowLength.toFloat()
+                    )
+                } else {
+                    mPath.moveTo(leftOffset + mArrowWidth / 2f, (mTop - mArrowLength).toFloat())
+                }
 
+                if (leftOffset + mArrowWidth < mRight - mRTR) {
+                    mPath.rCubicTo(
+                        0f,
+                        0f,
+                        mArrowWidth / 2f,
+                        mArrowLength.toFloat(),
+                        mArrowWidth / 2f,
+                        mArrowLength.toFloat()
+                    )
+                    mPath.lineTo((mRight - mRTR).toFloat(), mTop.toFloat())
+                }
+                mPath.quadTo(
+                    mRight.toFloat(),
+                    mTop.toFloat(),
+                    mRight.toFloat(),
+                    (mTop + mRTR).toFloat()
+                )
+                mPath.lineTo(mRight.toFloat(), (mBottom - mRBR).toFloat())
+                mPath.quadTo(
+                    mRight.toFloat(),
+                    mBottom.toFloat(),
+                    (mRight - mRBR).toFloat(),
+                    mBottom.toFloat()
+                )
+                mPath.lineTo((mLeft + mLBR).toFloat(), mBottom.toFloat())
+                mPath.quadTo(
+                    mLeft.toFloat(),
+                    mBottom.toFloat(),
+                    mLeft.toFloat(),
+                    (mBottom - mLBR).toFloat()
+                )
+                mPath.lineTo(mLeft.toFloat(), (mTop + mLTR).toFloat())
+                if (leftOffset >= mLTR) {
+                    mPath.quadTo(
+                        mLeft.toFloat(),
+                        mTop.toFloat(),
+                        (mLeft + mLTR).toFloat(),
+                        mTop.toFloat()
+                    )
+                } else {
+                    mPath.quadTo(
+                        mLeft.toFloat(),
+                        mTop.toFloat(),
+                        leftOffset + mArrowWidth / 2f,
+                        (mTop - mArrowLength).toFloat()
+                    )
+                }
             }
             ArrowAt.RIGHT -> {
+                if (topOffset >= mRTR) {
+                    mPath.moveTo(mRight.toFloat(), topOffset.toFloat())
+                    mPath.rCubicTo(
+                        0f,
+                        0f,
+                        mArrowLength.toFloat(),
+                        mArrowWidth / 2f,
+                        mArrowLength.toFloat(),
+                        mArrowWidth / 2f
+                    )
+                } else {
+                    mPath.moveTo((mRight + mArrowLength).toFloat(), topOffset + mArrowWidth / 2f)
+                }
 
+                if (topOffset + mArrowWidth < mBottom - mRBR) {
+                    mPath.rCubicTo(
+                        0f,
+                        0f,
+                        -mArrowLength.toFloat(),
+                        mArrowWidth / 2f,
+                        -mArrowLength.toFloat(),
+                        mArrowWidth / 2f
+                    )
+                    mPath.lineTo(mRight.toFloat(), (mBottom - mRBR).toFloat())
+                }
+                mPath.quadTo(
+                    mRight.toFloat(),
+                    mBottom.toFloat(),
+                    (mRight - mRBR).toFloat(),
+                    mBottom.toFloat()
+                )
+                mPath.lineTo((mLeft + mLBR).toFloat(), mBottom.toFloat())
+                mPath.quadTo(
+                    mLeft.toFloat(),
+                    mBottom.toFloat(),
+                    mLeft.toFloat(),
+                    (mBottom - mLBR).toFloat()
+                )
+                mPath.lineTo(mLeft.toFloat(), (mTop + mLTR).toFloat())
+                mPath.quadTo(
+                    mLeft.toFloat(),
+                    mTop.toFloat(),
+                    (mLeft + mLTR).toFloat(),
+                    mTop.toFloat()
+                )
+                mPath.lineTo((mRight - mRTR).toFloat(), mTop.toFloat())
+                if (topOffset >= mRTR) {
+                    mPath.quadTo(
+                        mRight.toFloat(),
+                        mTop.toFloat(),
+                        mRight.toFloat(),
+                        (mTop + mRTR).toFloat()
+                    )
+                } else {
+                    mPath.quadTo(
+                        mRight.toFloat(),
+                        mTop.toFloat(),
+                        (mRight + mArrowLength).toFloat(),
+                        topOffset + mArrowWidth / 2f
+                    )
+                }
             }
             ArrowAt.BOTTOM -> {
+                if (leftOffset >= mLBR) {
+                    mPath.moveTo(leftOffset.toFloat(), mBottom.toFloat())
+                    mPath.rCubicTo(
+                        0f,
+                        0f,
+                        mArrowWidth / 2f,
+                        mArrowLength.toFloat(),
+                        mArrowWidth / 2f,
+                        mArrowLength.toFloat()
+                    )
+                } else {
+                    mPath.moveTo(leftOffset + mArrowWidth / 2f, (mBottom + mArrowLength).toFloat())
+                }
 
+                if (leftOffset + mArrowWidth < mRight - mRBR) {
+                    mPath.rCubicTo(
+                        0f,
+                        0f,
+                        mArrowWidth / 2f,
+                        -mArrowLength.toFloat(),
+                        mArrowWidth / 2f,
+                        -mArrowLength.toFloat()
+                    )
+                    mPath.lineTo((mRight - mRBR).toFloat(), mBottom.toFloat())
+                }
+                mPath.quadTo(
+                    mRight.toFloat(),
+                    mBottom.toFloat(),
+                    mRight.toFloat(),
+                    (mBottom - mRBR).toFloat()
+                )
+                mPath.lineTo(mRight.toFloat(), (mTop + mRTR).toFloat())
+                mPath.quadTo(
+                    mRight.toFloat(),
+                    mTop.toFloat(),
+                    (mRight - mRTR).toFloat(),
+                    mTop.toFloat()
+                )
+                mPath.lineTo((mLeft + mLTR).toFloat(), mTop.toFloat())
+                mPath.quadTo(
+                    mLeft.toFloat(),
+                    mTop.toFloat(),
+                    mLeft.toFloat(),
+                    (mTop + mLTR).toFloat()
+                )
+                mPath.lineTo(mLeft.toFloat(), (mBottom - mLBR).toFloat())
+                if (leftOffset >= mLBR) {
+                    mPath.quadTo(
+                        mLeft.toFloat(),
+                        mBottom.toFloat(),
+                        (mLeft + mLBR).toFloat(),
+                        mBottom.toFloat()
+                    )
+                } else {
+                    mPath.quadTo(
+                        mLeft.toFloat(),
+                        mBottom.toFloat(),
+                        leftOffset + mArrowWidth / 2f,
+                        (mBottom + mArrowLength).toFloat()
+                    )
+                }
             }
         }
 
@@ -175,33 +364,37 @@ class BlurBubbleView @JvmOverloads constructor(
     }
 
     @ColorInt
-    private var mBubbleColor = Color.WHITE
+    private var mBubbleColor: Int
 
     @ColorInt
-    private var mBubbleBorderColor = Color.BLACK
-    private var mBubbleBorderSize = 0
-    private var mBubblePadding = 0
-    private var mBubbleRadius = 0
-    private var mLTR = 0
-    private var mRTR = 0
-    private var mLBR = 0
-    private var mRBR = 0
+    private var mBubbleBorderColor: Int
+    private var mBubbleBorderSize: Int
+    private var mBubblePadding: Int
+    private var mBubbleRadius: Int
+    private var mLTR: Int
+        get() = if (field == -1) mBubbleRadius else field
+    private var mRTR: Int
+        get() = if (field == -1) mBubbleRadius else field
+    private var mLBR: Int
+        get() = if (field == -1) mBubbleRadius else field
+    private var mRBR: Int
+        get() = if (field == -1) mBubbleRadius else field
 
-    private var mArrowAt: ArrowAt = ArrowAt.LEFT
-    private var mArrowPosition = 0
-    private var mArrowWidth = 0
-    private var mArrowLength = 0
+    private var mArrowAt: ArrowAt
+    private var mArrowPosition: Int
+    private var mArrowWidth: Int
+    private var mArrowLength: Int
 
     @ColorInt
-    private var mShadowColor = Color.GRAY
-    private var mShadowRadius = 0
-    private var mShadowX = 0
-    private var mShadowY = 0
+    private var mShadowColor: Int
+    private var mShadowRadius: Int
+    private var mShadowX: Int
+    private var mShadowY: Int
 
     /**
      * 是否开启背景模糊效果
      */
-    private var mOpenBlur = false
+    private var mOpenBlur: Boolean
 
     /**
      * 初始化气泡框内容 padding 大小
@@ -254,12 +447,14 @@ class BlurBubbleView @JvmOverloads constructor(
             mBubbleBorderColor = getColor(R.styleable.BlurBubbleView_bbv_borderColor, Color.BLACK)
             mBubbleBorderSize =
                 getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_borderSize, 0)
-            mBubblePadding = getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_padding, 0)
-            mBubbleRadius = getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_radius, 0)
-            mLTR = getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_leftTopRadius, 0)
-            mRTR = getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_rightTopRadius, 0)
-            mLBR = getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_leftBottomRadius, 0)
-            mRBR = getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_rightBottomRadius, 0)
+            mBubblePadding =
+                getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_padding, dp2px(10f))
+            mBubbleRadius =
+                getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_radius, dp2px(10f))
+            mLTR = getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_leftTopRadius, -1)
+            mRTR = getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_rightTopRadius, -1)
+            mLBR = getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_leftBottomRadius, -1)
+            mRBR = getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_rightBottomRadius, -1)
             mArrowAt = when (getInt(R.styleable.BlurBubbleView_bbv_arrowAt, 0)) {
                 1 -> ArrowAt.LEFT
                 2 -> ArrowAt.TOP
@@ -268,13 +463,16 @@ class BlurBubbleView @JvmOverloads constructor(
                 else -> ArrowAt.LEFT
             }
             mArrowPosition =
-                getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_arrowPosition, 0)
-            mArrowWidth = getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_arrowWidth, 0)
-            mArrowLength = getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_arrowLength, 0)
+                getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_arrowPosition, dp2px(30f))
+            mArrowWidth =
+                getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_arrowWidth, dp2px(14f))
+            mArrowLength =
+                getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_arrowLength, dp2px(12f))
             mShadowColor = getColor(R.styleable.BlurBubbleView_bbv_shadowColor, Color.GRAY)
-            mShadowRadius = getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_shadowRadius, 0)
-            mShadowX = getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_shadowX, 0)
-            mShadowY = getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_shadowY, 0)
+            mShadowRadius =
+                getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_shadowRadius, dp2px(5f))
+            mShadowX = getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_shadowX, dp2px(1f))
+            mShadowY = getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_shadowY, dp2px(1f))
             mOpenBlur = getBoolean(R.styleable.BlurBubbleView_bbv_blur, false)
 
             recycle()
@@ -290,7 +488,7 @@ class BlurBubbleView @JvmOverloads constructor(
         LEFT(1),
         TOP(2),
         RIGHT(3),
-        BOTTOM(4);
+        BOTTOM(4)
     }
 
     companion object {
