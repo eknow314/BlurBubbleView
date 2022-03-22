@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--背景虚化的气泡布局-->
+    <declare-styleable name="BlurBubbleView">
+
+        <!--气泡颜色-->
+        <attr name="bbv_color" format="color" />
+        <!--边框颜色-->
+        <attr name="bbv_borderColor" format="color" />
+        <!--边框大小-->
+        <attr name="bbv_borderSize" format="dimension" />
+        <!--气泡内容区域 padding-->
+        <attr name="bbv_padding" format="dimension" />
+        <!--气泡圆角-->
+        <attr name="bbv_radius" format="dimension" />
+        <!--气泡左上圆角-->
+        <attr name="bbv_leftTopRadius" format="dimension" />
+        <!--气泡右上圆角-->
+        <attr name="bbv_rightTopRadius" format="dimension" />
+        <!--气泡左下圆角-->
+        <attr name="bbv_leftBottomRadius" format="dimension" />
+        <!--气泡右下圆角-->
+        <attr name="bbv_rightBottomRadius" format="dimension" />
+
+        <!--箭头所在边-->
+        <attr name="bbv_arrowAt">
+            <enum name="left" value="1" />
+            <enum name="top" value="2" />
+            <enum name="right" value="3" />
+            <enum name="bottom" value="4" />
+        </attr>
+        <!--箭头在边上的绝对位置-->
+        <attr name="bbv_arrowPosition" format="dimension" />
+        <!--箭头在边上的宽度，平行于边的宽度-->
+        <attr name="bbv_arrowWidth" format="dimension" />
+        <!--箭头在边上的长度，垂直于边的长度-->
+        <attr name="bbv_arrowLength" format="dimension" />
+
+        <!--气泡阴影颜色-->
+        <attr name="bbv_shadowColor" format="color" />
+        <!--气泡阴影圆角-->
+        <attr name="bbv_shadowRadius" format="dimension" />
+        <!--气泡阴影 X 轴偏移量-->
+        <attr name="bbv_shadowX" format="dimension" />
+        <!--气泡阴影 Y 轴偏移量-->
+        <attr name="bbv_shadowY" format="dimension" />
+
+        <!--气泡是否开启背景模糊效果-->
+        <attr name="bbv_blur" format="boolean" />
+
+    </declare-styleable>
+</resources>
