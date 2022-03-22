@@ -1,0 +1,3 @@
+rootProject.name = "BlurBubbleView"
+include ':app'
+include ':library'
