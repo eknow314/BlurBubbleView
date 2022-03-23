@@ -14,6 +14,8 @@ android {
         targetSdk 30
         versionCode 1
         versionName "1.0.1"
+        renderscriptTargetApi 21
+        renderscriptSupportModeEnabled true
     }
 
     buildTypes {

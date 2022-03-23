@@ -47,6 +47,8 @@
 
         <!--气泡是否开启背景模糊效果-->
         <attr name="bbv_blur" format="boolean" />
+        <!--气泡背景模糊程度，最大 25f-->
+        <attr name="bbv_blurRadius" format="integer"/>
 
     </declare-styleable>
 </resources>
