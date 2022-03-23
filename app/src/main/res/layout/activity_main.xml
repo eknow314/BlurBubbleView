@@ -15,10 +15,18 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_bg"
-            android:layout_width="100dp"
+            android:layout_width="70dp"
             android:layout_height="100dp"
-            android:layout_gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="120dp"
             android:scaleType="centerCrop"
+            android:src="@mipmap/pic_bg" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="70dp"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            android:layout_marginStart="90dp"
             android:src="@mipmap/pic_bg" />
 
     </FrameLayout>
@@ -29,11 +37,12 @@
         android:layout_height="150dp"
         android:layout_marginTop="30dp"
         app:bbv_arrowAt="left"
-        app:bbv_color="#40138CAF"
+        app:bbv_arrowLength="15dp"
         app:bbv_arrowPosition="25dp"
         app:bbv_arrowWidth="10dp"
-        app:bbv_arrowLength="15dp"
         app:bbv_blur="true"
+        app:bbv_blurRadius="2"
+        app:bbv_color="#3D0067CA"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

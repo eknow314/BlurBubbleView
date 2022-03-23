@@ -3,6 +3,7 @@ package com.eknow.blurbubble
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.ColorDrawable
+import android.os.Parcelable
 import android.renderscript.Allocation
 import android.renderscript.Element
 import android.renderscript.RenderScript
@@ -42,15 +43,14 @@ class BlurBubbleView @JvmOverloads constructor(
     /**
      * RenderScript
      */
-    private var mRenderScript: RenderScript
-    private var mBlurScript: ScriptIntrinsicBlur
+    private var mRenderScript: RenderScript? = null
+    private var mBlurScript: ScriptIntrinsicBlur? = null
     private val mDownSampleFactor = 8
 
     /**
      * 被模糊的背景字段
      */
     private var mBlurBgDstRectF: RectF
-    private var mBlurBgSrcRect: Rect
     private var mBlurBgBeforePaint: Paint
     private var mBlurBgPaint: Paint
 
@@ -376,7 +376,7 @@ class BlurBubbleView @JvmOverloads constructor(
     }
 
     /**
-     * 背景模糊参数准备，成功返回 true 再进行画板绘制
+     * 背景模糊参数准备，获取模糊的 bitmap，成功返回 true 再进行画板绘制
      */
     private fun blurPrepare(): Boolean {
         val width = mBlurredView!!.width
@@ -427,50 +427,38 @@ class BlurBubbleView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        // 绘制基础气泡
-        canvas.drawPath(mPath, mPaint)
         // 绘制模糊背景
         if (mOpenBlur && mBlurredView != null) {
             if (blurPrepare()) {
-                mBlurredView?.let { it ->
-                    if (it.background != null && it.background is ColorDrawable) {
-                        mBitmapToBlur?.eraseColor((it.background as ColorDrawable).color)
+                mBlurredView?.let { view ->
+                    if (view.background != null && view.background is ColorDrawable) {
+                        mBitmapToBlur?.eraseColor((view.background as ColorDrawable).color)
                     } else {
                         mBitmapToBlur?.eraseColor(Color.TRANSPARENT)
                     }
-                    it.draw(mBlurringCanvas)
 
+                    view.draw(mBlurringCanvas)
                     mBlurInput?.copyFrom(mBitmapToBlur)
-                    mBlurScript.setInput(mBlurInput)
-                    mBlurScript.forEach(mBlurOutput)
+                    mBlurScript?.setInput(mBlurInput)
+                    mBlurScript?.forEach(mBlurOutput)
                     mBlurOutput?.copyTo(mBlurredBitmap)
 
-                    mBlurredBitmap?.let {
+                    mBlurredBitmap?.let { bitmap ->
                         canvas.save()
                         mPath.computeBounds(mBlurBgDstRectF, true)
                         val layer = canvas.saveLayer(mBlurBgDstRectF, null)
                         canvas.drawPath(mPath, mBlurBgBeforePaint)
-
-                        val dstRatio = mBlurBgDstRectF.width() / mBlurBgDstRectF.height()
-                        val imgRatio = it.width * 1f / it.height
-
-                        if (dstRatio > imgRatio) {
-                            val top = (it.height - it.width / dstRatio) / 2
-                            val bottom = top + it.width / dstRatio
-                            mBlurBgSrcRect.set(0, top.toInt(), it.width, bottom.toInt())
-                        } else {
-                            val left = (it.width - it.height * dstRatio) / 2
-                            val width = left + it.height * dstRatio
-                            mBlurBgSrcRect.set(left.toInt(), 0, width.toInt(), it.height)
-                        }
-
-                        canvas.drawBitmap(it, mBlurBgSrcRect, mBlurBgDstRectF, mBlurBgPaint)
+                        canvas.translate(view.x - x, view.y - y)
+                        canvas.scale(mDownSampleFactor.toFloat(), mDownSampleFactor.toFloat())
+                        canvas.drawBitmap(bitmap, 0f, 0f, mBlurBgPaint)
                         canvas.restoreToCount(layer)
                     }
 
                 }
             }
         }
+        // 绘制基础气泡
+        canvas.drawPath(mPath, mPaint)
         // 绘制气泡边框
         if (mBubbleBorderSize != 0) {
             canvas.drawPath(mPath, mBubbleBorderPaint)
@@ -490,6 +478,81 @@ class BlurBubbleView @JvmOverloads constructor(
         super.invalidate()
     }
 
+    override fun onSaveInstanceState(): Parcelable {
+        val superState = super.onSaveInstanceState()
+        val ss = SavedState(superState)
+        ss.bubbleColor = mBubbleColor
+        ss.bubbleBorderColor = mBubbleBorderColor
+        ss.bubbleBorderSize = mBubbleBorderSize
+        ss.bubblePadding = mBubblePadding
+        ss.bubbleRadius = mBubbleRadius
+        ss.lTR = mLTR
+        ss.rTR = mRTR
+        ss.lBR = mLBR
+        ss.rBR = mRBR
+        ss.arrowAt = getArrowAtValue(mArrowAt)
+        ss.arrowPosition = mArrowPosition
+        ss.arrowWidth = mArrowWidth
+        ss.arrowLength = mArrowLength
+        ss.shadowColor = mShadowColor
+        ss.shadowRadius = mShadowRadius
+        ss.shadowX = mShadowX
+        ss.shadowY = mShadowY
+        ss.openBlur = if (mOpenBlur) 1 else 0
+        ss.blurRadius = mBlurRadius
+        return ss
+    }
+
+    override fun onRestoreInstanceState(state: Parcelable) {
+        if (state !is SavedState) {
+            super.onRestoreInstanceState(state)
+            return
+        }
+        val ss: SavedState = state
+        super.onRestoreInstanceState(ss.superState)
+        mBubbleColor = ss.bubbleColor
+        mBubbleBorderColor = ss.bubbleBorderColor
+        mBubbleBorderSize = ss.bubbleBorderSize
+        mBubblePadding = ss.bubblePadding
+        mBubbleRadius = ss.bubbleRadius
+        mLTR = ss.lTR
+        mRTR = ss.rTR
+        mLBR = ss.lBR
+        mRBR = ss.rBR
+        mArrowAt = getArrowAt(ss.arrowAt)
+        mArrowPosition = ss.arrowPosition
+        mArrowWidth = ss.arrowWidth
+        mArrowLength = ss.arrowLength
+        mShadowColor = ss.shadowColor
+        mShadowRadius = ss.shadowRadius
+        mShadowX = ss.shadowX
+        mShadowY = ss.shadowY
+        mOpenBlur = ss.openBlur == 1
+        mBlurRadius = ss.blurRadius
+    }
+
+    /**
+     * 内存回收
+     */
+    fun recycle() {
+        mRenderScript = null
+        mBlurScript = null
+        mBlurringCanvas = null
+        mBitmapToBlur?.let {
+            if (!it.isRecycled) {
+                it.recycle()
+            }
+        }
+        mBlurredBitmap?.let {
+            if (!it.isRecycled) {
+                it.recycle()
+            }
+        }
+        mBlurInput?.destroy()
+        mBlurOutput?.destroy()
+    }
+
+
     /**
      * 需要被模糊的背景
      */
@@ -507,7 +570,7 @@ class BlurBubbleView @JvmOverloads constructor(
         get() = mBlurRadius
         set(value) {
             mBlurRadius = value
-            mBlurScript.setRadius(mBlurRadius.toFloat())
+            mBlurScript?.setRadius(mBlurRadius.toFloat())
             invalidate()
         }
 
@@ -602,6 +665,15 @@ class BlurBubbleView @JvmOverloads constructor(
         }
     }
 
+    /**
+     * 初始化模糊背景工具脚本
+     */
+    private fun initRenderScript() {
+        mRenderScript = RenderScript.create(context)
+        mBlurScript = ScriptIntrinsicBlur.create(mRenderScript, Element.U8_4(mRenderScript))
+        mBlurScript?.setRadius(mBlurRadius.toFloat())
+    }
+
     private fun dp2px(dp: Float): Int {
         val scale = resources.displayMetrics.density
         return (dp * scale + 0.5f).toInt()
@@ -615,7 +687,6 @@ class BlurBubbleView @JvmOverloads constructor(
         mPaint.style = Paint.Style.FILL
         mBubbleBorderPaint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.DITHER_FLAG)
         mBlurBgDstRectF = RectF()
-        mBlurBgSrcRect = Rect()
         mBlurBgBeforePaint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.DITHER_FLAG)
         mBlurBgPaint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.DITHER_FLAG)
         mBlurBgPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
@@ -633,13 +704,7 @@ class BlurBubbleView @JvmOverloads constructor(
             mRTR = getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_rightTopRadius, -1)
             mLBR = getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_leftBottomRadius, -1)
             mRBR = getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_rightBottomRadius, -1)
-            mArrowAt = when (getInt(R.styleable.BlurBubbleView_bbv_arrowAt, 0)) {
-                1 -> ArrowAt.LEFT
-                2 -> ArrowAt.TOP
-                3 -> ArrowAt.RIGHT
-                4 -> ArrowAt.BOTTOM
-                else -> ArrowAt.LEFT
-            }
+            mArrowAt = getArrowAt(getInt(R.styleable.BlurBubbleView_bbv_arrowAt, 0))
             mArrowPosition =
                 getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_arrowPosition, dp2px(30f))
             mArrowWidth =
@@ -659,9 +724,9 @@ class BlurBubbleView @JvmOverloads constructor(
 
         initPadding()
 
-        mRenderScript = RenderScript.create(context)
-        mBlurScript = ScriptIntrinsicBlur.create(mRenderScript, Element.U8_4(mRenderScript))
-        mBlurScript.setRadius(mBlurRadius.toFloat())
+        if (mOpenBlur) {
+            initRenderScript()
+        }
     }
 
     /**
@@ -672,6 +737,21 @@ class BlurBubbleView @JvmOverloads constructor(
         TOP(2),
         RIGHT(3),
         BOTTOM(4)
+    }
+
+    private fun getArrowAtValue(type: ArrowAt) = when (type) {
+        ArrowAt.LEFT -> 1
+        ArrowAt.TOP -> 2
+        ArrowAt.RIGHT -> 3
+        ArrowAt.BOTTOM -> 4
+    }
+
+    private fun getArrowAt(value: Int) = when (value) {
+        1 -> ArrowAt.LEFT
+        2 -> ArrowAt.TOP
+        3 -> ArrowAt.RIGHT
+        4 -> ArrowAt.BOTTOM
+        else -> ArrowAt.LEFT
     }
 
 }
