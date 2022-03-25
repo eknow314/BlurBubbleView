@@ -1,6 +1,8 @@
 # BlurBubbleView
 背景虚化的气泡布局，继承 FrameLayout，自定义气泡样式，可以开启背景模糊效果
 
+[![](https://jitpack.io/v/eknow314/BlurBubbleView.svg)](https://jitpack.io/#eknow314/BlurBubbleView)
+
 
 ### 依赖配置
 
@@ -61,7 +63,7 @@ blurBubbleView?.blurredView = layout
 ```
 注意，这里需要 layout 的宽高不小于 blurBubbleView 的宽高
 
-效果图
+
 ![image](https://cdn.jsdelivr.net/gh/eknow314/blog_pic/img/202203251502548.png)
 
 ---
