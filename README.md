@@ -1,5 +1,6 @@
 # BlurBubbleView
 背景虚化的气泡布局，继承 FrameLayout，自定义气泡样式，可以开启背景模糊效果
+android 12 之后背景模糊可以使用 [RenderEffect](https://developer.android.google.cn/reference/android/graphics/RenderEffect?hl=en)
 
 [![](https://jitpack.io/v/eknow314/BlurBubbleView.svg)](https://jitpack.io/#eknow314/BlurBubbleView)
 
