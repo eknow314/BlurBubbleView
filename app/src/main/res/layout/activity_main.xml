@@ -45,6 +45,15 @@
         app:bbv_color="#3D0067CA"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <androidx.constraintlayout.utils.widget.ImageFilterView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:round="15dp"
+            android:src="@mipmap/ic_launcher"/>
+
+    </com.eknow.blurbubble.BlurBubbleView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
