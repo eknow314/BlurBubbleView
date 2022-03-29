@@ -45,6 +45,16 @@
         <!--气泡阴影 Y 轴偏移量-->
         <attr name="bbv_shadowY" format="dimension" />
 
+        <!--气泡渐变方向-->
+        <attr name="bbv_gradientOrientation">
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
+        </attr>
+        <!--气泡渐变颜色0-->
+        <attr name="bbv_gradientColor0" format="color" />
+        <!--气泡渐变颜色1-->
+        <attr name="bbv_gradientColor1" format="color" />
+
         <!--气泡是否开启背景模糊效果-->
         <attr name="bbv_blur" format="boolean" />
         <!--气泡背景模糊程度，最大 25f-->

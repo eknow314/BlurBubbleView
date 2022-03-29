@@ -33,26 +33,24 @@
 
     <com.eknow.blurbubble.BlurBubbleView
         android:id="@+id/blurBubbleView"
-        android:layout_width="200dp"
-        android:layout_height="150dp"
+        android:layout_width="300dp"
+        android:layout_height="250dp"
         android:layout_marginTop="30dp"
-        app:bbv_arrowAt="left"
+        app:bbv_arrowAt="bottom"
         app:bbv_arrowLength="15dp"
-        app:bbv_arrowPosition="25dp"
+        app:bbv_arrowPosition="55dp"
         app:bbv_arrowWidth="10dp"
         app:bbv_blur="true"
         app:bbv_blurRadius="2"
         app:bbv_color="#3D0067CA"
+        app:bbv_gradientOrientation="horizontal"
+        app:bbv_gradientColor1="#CC138DAF"
+        app:bbv_gradientColor0="#CC065FB3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" >
 
-        <androidx.constraintlayout.utils.widget.ImageFilterView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            app:round="15dp"
-            android:src="@mipmap/ic_launcher"/>
+
 
     </com.eknow.blurbubble.BlurBubbleView>
 

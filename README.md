@@ -49,6 +49,9 @@ android {
         app:bbv_blur="false"
         app:bbv_blurRadius="2"
         app:bbv_color="#3D0067CA"
+        app:bbv_gradientOrientation="horizontal"
+        app:bbv_gradientColor1="#CC138DAF"
+        app:bbv_gradientColor0="#CC065FB3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -64,8 +67,6 @@ blurBubbleView?.blurredView = layout
 ```
 注意，这里需要 layout 的宽高不小于 blurBubbleView 的宽高
 
-
-![image](https://cdn.jsdelivr.net/gh/eknow314/blog_pic/img/202203251502548.png)
 
 ---
 
@@ -90,5 +91,8 @@ blurBubbleView?.blurredView = layout
 | bbv_shadowRadius | 气泡阴影圆角 | 5dp |
 | bbv_shadowX | 气泡阴影 X 轴偏移量 | 1dp |
 | bbv_shadowY | 气泡阴影 Y 轴偏移量 | 1dp |
+| bbv_gradientOrientation | 气泡渐变方向 | horizontal |
+| bbv_gradientColor0 | 气泡渐变颜色0 | Color.TRANSPARENT |
+| bbv_gradientColor1 | 气泡渐变颜色1 | Color.TRANSPARENT |
 | bbv_blur | 气泡是否开启背景模糊效果 | false |
 | bbv_blurRadius | 气泡背景模糊程度，最大 25 | 15 |

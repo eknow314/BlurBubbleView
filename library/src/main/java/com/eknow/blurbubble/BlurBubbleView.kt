@@ -74,7 +74,34 @@ class BlurBubbleView @JvmOverloads constructor(
             mShadowY.toFloat(),
             mShadowColor
         )
-        mPaint.color = mBubbleColor
+
+        if (mGradientColor0 != Color.TRANSPARENT && mGradientColor1 != Color.TRANSPARENT) {
+            if (mGradientOrientation == 0) {
+                // 水平渐变
+                mPaint.shader = LinearGradient(
+                    0f,
+                    0f,
+                    mWidth.toFloat(),
+                    0f,
+                    mGradientColor0,
+                    mGradientColor1,
+                    Shader.TileMode.CLAMP
+                )
+            } else {
+                // 垂直渐变
+                mPaint.shader = LinearGradient(
+                    0f,
+                    0f,
+                    0f,
+                    mHeight.toFloat(),
+                    mGradientColor0,
+                    mGradientColor1,
+                    Shader.TileMode.CLAMP
+                )
+            }
+        } else {
+            mPaint.color = mBubbleColor
+        }
 
         mBubbleBorderPaint.color = mBubbleBorderColor
         mBubbleBorderPaint.strokeWidth = mBubbleBorderSize.toFloat()
@@ -623,6 +650,23 @@ class BlurBubbleView @JvmOverloads constructor(
     private var mShadowY: Int
 
     /**
+     * 气泡背景渐变方向，0：水平，1：垂直
+     */
+    private var mGradientOrientation: Int
+
+    /**
+     * 气泡背景渐变色0
+     */
+    @ColorInt
+    private var mGradientColor0: Int
+
+    /**
+     * 气泡背景渐变色1
+     */
+    @ColorInt
+    private var mGradientColor1: Int
+
+    /**
      * 是否开启背景模糊效果
      */
     private var mOpenBlur: Boolean
@@ -716,6 +760,9 @@ class BlurBubbleView @JvmOverloads constructor(
                 getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_shadowRadius, dp2px(5f))
             mShadowX = getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_shadowX, dp2px(1f))
             mShadowY = getDimensionPixelOffset(R.styleable.BlurBubbleView_bbv_shadowY, dp2px(1f))
+            mGradientOrientation = getInt(R.styleable.BlurBubbleView_bbv_gradientOrientation, 0)
+            mGradientColor0 = getColor(R.styleable.BlurBubbleView_bbv_gradientColor0, Color.TRANSPARENT)
+            mGradientColor1 = getColor(R.styleable.BlurBubbleView_bbv_gradientColor1, Color.TRANSPARENT)
             mOpenBlur = getBoolean(R.styleable.BlurBubbleView_bbv_blur, false)
             mBlurRadius = getInt(R.styleable.BlurBubbleView_bbv_blurRadius, 15)
 
