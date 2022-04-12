@@ -36,6 +36,7 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'com.google.android.material:material:1.3.0'
+    implementation 'com.github.eknow314:ImageTextView:1.0.7'
 
     implementation project(':library')
 }

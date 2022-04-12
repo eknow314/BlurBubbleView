@@ -25,8 +25,8 @@
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="70dp"
             android:layout_height="100dp"
-            android:scaleType="centerCrop"
             android:layout_marginStart="90dp"
+            android:scaleType="centerCrop"
             android:src="@mipmap/pic_bg" />
 
     </FrameLayout>
@@ -43,15 +43,32 @@
         app:bbv_blur="true"
         app:bbv_blurRadius="2"
         app:bbv_color="#3D0067CA"
-        app:bbv_gradientOrientation="horizontal"
-        app:bbv_gradientColor1="#CC138DAF"
         app:bbv_gradientColor0="#CC065FB3"
+        app:bbv_gradientColor1="#CC138DAF"
+        app:bbv_gradientOrientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
-
+        app:layout_constraintTop_toTopOf="parent">
 
 
     </com.eknow.blurbubble.BlurBubbleView>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_test_dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:onClick="onTestDialogClick"
+        android:text="dialog"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="324dp"
+    android:layout_height="83dp"
+    tools:background="#138DAF"
+    tools:ignore="ResourceName">
+
+    <com.eknow.imagetext.ImageTextView
+        android:id="@+id/itv_clean_all"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        app:itv_imgRes="@drawable/ic_clean_all"
+        app:itv_imgSize="25dp"
+        app:itv_imgTopMargin="11dp"
+        app:itv_textHoldColor="@android:color/white"
+        app:itv_textMaxLines="2"
+        app:itv_textNormalColor="@android:color/white"
+        app:itv_textSize="12sp"
+        app:itv_textStr="全图清扫"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/itv_clean_room"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.eknow.imagetext.ImageTextView
+        android:id="@+id/itv_clean_room"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        app:itv_imgRes="@drawable/ic_clean_room"
+        app:itv_imgSize="25dp"
+        app:itv_imgTopMargin="11dp"
+        app:itv_textHoldColor="@android:color/white"
+        app:itv_textMaxLines="2"
+        app:itv_textNormalColor="@android:color/white"
+        app:itv_textSize="12sp"
+        app:itv_textStr="分区清扫"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/itv_clean_region"
+        app:layout_constraintStart_toEndOf="@id/itv_clean_all"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.eknow.imagetext.ImageTextView
+        android:id="@+id/itv_clean_region"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        app:itv_imgRes="@drawable/ic_clean_region"
+        app:itv_imgSize="25dp"
+        app:itv_imgTopMargin="11dp"
+        app:itv_textHoldColor="@android:color/white"
+        app:itv_textMaxLines="2"
+        app:itv_textNormalColor="@android:color/white"
+        app:itv_textSize="12sp"
+        app:itv_textStr="区域清扫"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/itv_clean_spot"
+        app:layout_constraintStart_toEndOf="@id/itv_clean_room"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.eknow.imagetext.ImageTextView
+        android:id="@+id/itv_clean_spot"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        app:itv_imgRes="@drawable/ic_clean_spot"
+        app:itv_imgSize="25dp"
+        app:itv_imgTopMargin="11dp"
+        app:itv_textHoldColor="@android:color/white"
+        app:itv_textMaxLines="2"
+        app:itv_textNormalColor="@android:color/white"
+        app:itv_textSize="12sp"
+        app:itv_textStr="定点清扫"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/itv_clean_region"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

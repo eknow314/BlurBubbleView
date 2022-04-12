@@ -2,6 +2,7 @@ package com.eknow.blurbubble.demo
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.FrameLayout
 import androidx.appcompat.widget.AppCompatImageView
 import com.eknow.blurbubble.BlurBubbleView
@@ -10,6 +11,7 @@ class MainActivity : AppCompatActivity() {
 
     private var layout: FrameLayout? = null
     private var blurBubbleView: BlurBubbleView? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,5 +26,9 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         blurBubbleView?.recycle()
         super.onDestroy()
+    }
+
+    fun onTestDialogClick(view: View) {
+        TestDialog(this, view).show()
     }
 }
